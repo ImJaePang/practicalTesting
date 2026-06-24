@@ -21,7 +21,7 @@ public class Product extends BaseEntity { // h2를 사용 할 예정
     private ProductType type;
 
     @Enumerated(EnumType.STRING)
-    private ProductSellingType sellingType;
+    private ProductSellingStatus sellingStatus;
 
     private String name;
 
