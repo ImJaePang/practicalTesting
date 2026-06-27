@@ -1,16 +1,14 @@
 package sample.cafekiosk.spring.api.service.order;
 
-import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import sample.cafekiosk.spring.api.controller.order.request.OrderCreateRequest;
 import sample.cafekiosk.spring.api.service.order.response.OrderResponse;
 import sample.cafekiosk.spring.domain.product.Product;
 import sample.cafekiosk.spring.domain.product.ProductRepository;
-import sample.cafekiosk.spring.domain.product.ProductSellingStatus;
 import sample.cafekiosk.spring.domain.product.ProductType;
 
 import java.time.LocalDateTime;
@@ -18,12 +16,11 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.groups.Tuple.tuple;
-import static org.junit.jupiter.api.Assertions.*;
-import static sample.cafekiosk.spring.domain.product.ProductSellingStatus.HOLD;
 import static sample.cafekiosk.spring.domain.product.ProductSellingStatus.SELLING;
 import static sample.cafekiosk.spring.domain.product.ProductType.HANDMADE;
 
 //@DataJpaTest
+@ActiveProfiles("test")
 @SpringBootTest
 class OrderServiceTest {
 
@@ -46,14 +43,16 @@ class OrderServiceTest {
                 .productNumbers(List.of("001", "002"))
                 .build();
 
+        LocalDateTime RegisteredDateTime =  LocalDateTime.now();
+
         // when
-        OrderResponse orderResponse = OrderService.creteOrder(request);
+        OrderResponse orderResponse = orderService.createOrder(request, RegisteredDateTime);
 
         // then
         assertThat(orderResponse.getId()).isNotNull();
         assertThat(orderResponse)
-                .extracting("registerDateTime", "totalPrice")
-                .contains(LocalDateTime.now(), 4000);
+                .extracting("registeredDateTime", "totalPrice")
+                .contains(RegisteredDateTime, 4000);
         assertThat(orderResponse.getProducts()).hasSize(2)
                 .extracting("productNumber", "price")
                 .containsExactlyInAnyOrder(

@@ -2,20 +2,78 @@ package sample.cafekiosk.spring.domain.order;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import sample.cafekiosk.spring.domain.product.Product;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.time.LocalDateTime;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static sample.cafekiosk.spring.domain.product.ProductSellingStatus.SELLING;
+import static sample.cafekiosk.spring.domain.product.ProductType.HANDMADE;
 
 class OrderTest {
 
-    @DisplayName("주문 생성 시 상품 리스트에서 주문의 총 금액을 계산한다.")
+    @DisplayName("주문 생성 시 등록시간을 기록한다.")
     @Test
-    void caclulateTotalPrice() {
+    void registeredDateTimeTest() {
         // given
-//        List.of(Product)
+        List<Product> products = List.of(
+                createProduct("001", 1000),
+                createProduct("002", 2000)
+        );
+
+        LocalDateTime registeLocalDateTime = LocalDateTime.now();
 
         // when
+        Order order = Order.create(products, registeLocalDateTime);
 
         // then
+        assertThat(order.getRegisteredDateTime()).isEqualTo(registeLocalDateTime);
+    }
+    
+    @DisplayName("주문 생성 시 주문 상태는 INIT 이다.")
+    @Test
+    void getOrderStatusTest() {
+        // given
+        List<Product> products = List.of(
+                createProduct("001", 1000),
+                createProduct("002", 2000)
+        );
 
+        LocalDateTime registeLocalDateTime = LocalDateTime.now();
+
+        // when
+        Order order = Order.create(products, registeLocalDateTime);
+
+        // then
+        assertThat(order.getOrderStatus()).isEqualByComparingTo(OrderStatus.INIT);
+    }
+
+    @DisplayName("주문 생성 시 상품 리스트에서 주문의 총 금액을 계산한다.")
+    @Test
+    void caclulateTotalPriceTest() {
+        // given
+        List<Product> products = List.of(
+                createProduct("001", 1000),
+                createProduct("002", 2000)
+        );
+
+        LocalDateTime registeLocalDateTime = LocalDateTime.now();
+
+        // when
+        Order order = Order.create(products, registeLocalDateTime);
+
+        // then
+        assertThat(order.caluclateTotalPrice(products)).isEqualTo(3000);
+    }
+
+    private Product createProduct(String productNumber, int price){
+        return Product.builder()
+                .type(HANDMADE)
+                .productNumber(productNumber)
+                .price(price)
+                .sellingStatus(SELLING)
+                .name("메뉴 이름")
+                .build();
     }
 }
