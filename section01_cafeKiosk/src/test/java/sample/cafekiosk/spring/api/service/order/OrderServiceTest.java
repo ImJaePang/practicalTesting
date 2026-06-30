@@ -1,5 +1,7 @@
 package sample.cafekiosk.spring.api.service.order;
 
+import jakarta.transaction.Transactional;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +9,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import sample.cafekiosk.spring.api.controller.order.request.OrderCreateRequest;
 import sample.cafekiosk.spring.api.service.order.response.OrderResponse;
+import sample.cafekiosk.spring.domain.order.OrderRepository;
+import sample.cafekiosk.spring.domain.orderproduct.OrderProductRepository;
 import sample.cafekiosk.spring.domain.product.Product;
 import sample.cafekiosk.spring.domain.product.ProductRepository;
 import sample.cafekiosk.spring.domain.product.ProductType;
@@ -23,12 +27,26 @@ import static sample.cafekiosk.spring.domain.product.ProductSellingStatus.SELLIN
 import static sample.cafekiosk.spring.domain.product.ProductType.HANDMADE;
 
 //@DataJpaTest
+//@Transactional
 @ActiveProfiles("test")
 @SpringBootTest
 class OrderServiceTest {
 
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private OrderRepository orderRepository;
+
+    @Autowired
+    private OrderProductRepository orderProductRepository;
+
+    @AfterEach
+    void tearDown() {
+        orderProductRepository.deleteAllInBatch();
+        productRepository.deleteAllInBatch();
+        orderRepository.deleteAllInBatch();
+    }
 
     @Autowired
     private ProductRepository productRepository;
