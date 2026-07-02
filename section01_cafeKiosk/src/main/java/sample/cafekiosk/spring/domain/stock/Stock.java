@@ -34,4 +34,12 @@ public class Stock extends BaseEntity {
                 .quantity(quantity)
                 .build();
     }
+
+    public boolean isQuantityLessThan(Long quantity) {
+        return this.quantity < quantity;
+    }
+
+    public void deductQuantity(Long quantity) {
+
+    }
 }
