@@ -48,14 +48,12 @@ public class OrderService {
         // 재고 차감 시도
         for (String stockProductNumber : stockProductNumbers){
             Stock stock = stockMap.get(stockProductNumber);
-            Long quantity = productCountingMap.get(stockProductNumber);
+            int quantity = Math.toIntExact(productCountingMap.get(stockProductNumber));
             if (stock.isQuantityLessThan(quantity)){
                 throw new IllegalArgumentException("재고가 부족한 상품이 있습니다.");
             }
 
             stock.deductQuantity(quantity);
-
-
         }
 
 

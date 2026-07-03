@@ -1,6 +1,5 @@
 package sample.cafekiosk.spring.api.service.order;
 
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,9 +17,7 @@ import sample.cafekiosk.spring.domain.stock.Stock;
 import sample.cafekiosk.spring.domain.stock.StockRepository;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -172,7 +169,7 @@ class OrderServiceTest {
     void streaTest() {
         // given
         List<String> lowerCaseFruit = List.of("apple", "orange", "banana", "kiwi");
-        List<String> upperCaseFruit = new ArrayList<>();
+//        List<String> upperCaseFruit = new ArrayList<>();
 
         List<Integer> numbers = List.of(1, 2, 3, 4, 5, 6, 7, 8, 9);
 
@@ -181,7 +178,7 @@ class OrderServiceTest {
 //            String upperFruit = fruit.toUpperCase();
 //            upperCaseFruit.add(upperFruit);
 //        }
-        upperCaseFruit = lowerCaseFruit.stream()
+        List<String> upperCaseFruit = lowerCaseFruit.stream()
                 .map(fruit -> fruit.toUpperCase())
                         .collect(Collectors.toList());
 
