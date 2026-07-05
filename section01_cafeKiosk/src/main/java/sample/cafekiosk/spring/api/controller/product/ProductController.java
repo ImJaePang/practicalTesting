@@ -20,7 +20,6 @@ public class ProductController {
     @PostMapping("/api/v1/product/new")
     public void createProduct(ProductCreateRequest request) {
         productService.createProduct(request);
-
     }
 
     @GetMapping("/api/v1/products/selling")
