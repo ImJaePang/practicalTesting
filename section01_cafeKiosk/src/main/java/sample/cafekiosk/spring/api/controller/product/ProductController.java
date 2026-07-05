@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RestController;
 import sample.cafekiosk.spring.api.controller.product.dto.request.ProductCreateRequest;
 import sample.cafekiosk.spring.api.service.product.ProductService;
 import sample.cafekiosk.spring.api.service.product.response.ProductResponse;
-import sample.cafekiosk.spring.domain.product.Product;
 
 import java.util.List;
 
@@ -18,8 +17,8 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping("/api/v1/product/new")
-    public void createProduct(ProductCreateRequest request) {
-        productService.createProduct(request);
+    public ProductResponse createProduct(ProductCreateRequest request) {
+        return productService.createProduct(request);
     }
 
     @GetMapping("/api/v1/products/selling")
