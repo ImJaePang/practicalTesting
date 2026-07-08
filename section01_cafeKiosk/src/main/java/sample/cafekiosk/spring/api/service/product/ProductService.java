@@ -42,7 +42,7 @@ public class ProductService {
 
 //    @Transactional(readOnly = true)
     public List<ProductResponse> getSellingProduct(){
-        List<Product> products =  productRepository.findAllBySellingStatusIn(ProductSellingStatus.forDisplay());
+        List<Product> products = productRepository.findAllBySellingStatusIn(ProductSellingStatus.forDisplay());
 
         return products.stream().map(ProductResponse::of)
                 .collect(Collectors.toList());
