@@ -3,8 +3,11 @@ package sample.cafekiosk.spring.api.service.order;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import sample.cafekiosk.spring.client.mail.MailSendClient;
 import sample.cafekiosk.spring.domain.history.mail.MailSendHistory;
 import sample.cafekiosk.spring.domain.history.mail.MailSendHistoryRepository;
 import sample.cafekiosk.spring.domain.order.Order;
@@ -20,6 +23,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 import static sample.cafekiosk.spring.domain.product.ProductSellingStatus.SELLING;
 import static sample.cafekiosk.spring.domain.product.ProductType.HANDMADE;
 
@@ -40,6 +45,9 @@ class OrderStatisticsServiceTest {
 
     @Autowired
     private OrderProductRepository orderProductRepository;
+
+    @MockitoBean
+    private MailSendClient mailSendClient;
 
     @AfterEach
     void tearDown() {
@@ -66,6 +74,9 @@ class OrderStatisticsServiceTest {
         Order order3 = createPaymentCompletedOrder(products, LocalDateTime.of(2026, 7, 15, 23, 59, 59));
         Order order4 = createPaymentCompletedOrder(products, LocalDateTime.of(2026, 7, 16, 0, 0, 0));
 
+        when(mailSendClient.sendEmail(any(String.class), any(String.class), any(String.class), any(String.class)))
+                .thenReturn(true);
+
         // when <html> sendOrderStatistics(<s>LocalDate</s>, <s>String</s>)의 시그니처 변경</html>
         boolean result = orderStatisticsService.sendOrderStatistics(LocalDate.of(2026,7,15), "test@test.com");
 
@@ -73,7 +84,7 @@ class OrderStatisticsServiceTest {
         assertThat(result).isTrue();
 
         List<MailSendHistory> mailSendHistory = mailSendHistoryRepository.findAll();
-        assertThat(mailSendHistory).hasSize(2)
+        assertThat(mailSendHistory).hasSize(1)
                 .extracting("content")
                 .containsExactlyInAnyOrder("총 매출 합계는 18000원 입니다.");
 
