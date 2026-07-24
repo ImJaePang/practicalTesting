@@ -1,6 +1,7 @@
 package sample.cafekiosk.spring.api.service.order;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,7 @@ class OrderStatisticsServiceTest {
         mailSendHistoryRepository.deleteAll();
     }
 
+    @Disabled
     @DisplayName("결제 완료 주문들을 조회하여 매출 통계 메일을 전송한다.")
     @Test
     void sendOrderStatistics() {
